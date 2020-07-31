@@ -1,3 +1,15 @@
+
+                                                               _      
+         _ __   __ _   ___  ___  ___  __ __ __  ___   _ _   __| |  ___
+        | '_ \ / _` | (_-< (_-< |___| \ V  V / / _ \ | '_| / _` | (_-<
+        | .__/ \__,_| /__/ /__/        \_/\_/  \___/ |_|   \__,_| /__/
+        |_|                                                           
+
+
+Overview:
+    pass-words is a Password Store <https://passwordstore.org> extension for
+    generating Diceware-style mnemonic passwords.
+
 Usage:
     pass words [generate] [-w file,--wordlist=file] [-s sep,--seperator=sep]
             [--clip,-c] [--in-place,-i | --force,-f] pass-name [word-count]
@@ -8,7 +20,12 @@ Usage:
         Optionally replace only the first line of an existing file with a new
         password.
 
-        The variable PASSWORD_STORE_WORD_LIST can be used to set the default
-        wordlist file location; likewise, PASSWORD_STORE_DEFAULT_SEPARATOR and
-        PASSWORD_STORE_WORD_COUNT can be used to define the default separator
-        and word count, respectively.
+Installation:
+    Move words.bash to ~/.password-store/.extensions/, or your system's global
+    pass extension dir (e.g. /usr/lib/password-store/extensions/).
+
+Config:
+    The variable PASSWORD_STORE_WORD_LIST can be used to set the default
+    wordlist file location; likewise, PASSWORD_STORE_DEFAULT_SEPARATOR and
+    PASSWORD_STORE_WORD_COUNT can be used to define the default separator
+    and word count, respectively.
