@@ -7,14 +7,14 @@
 
 
 Overview:
-    pass-words is a Password Store <https://passwordstore.org> extension for
-    generating Diceware-style mnemonic passwords.
+    pass-words is a Password Store/pass <https://passwordstore.org> extension
+    for generating Diceware-style mnemonic passwords.
 
 Usage:
     pass words [generate] [-w file,--wordlist=file] [-s sep,--seperator=sep]
             [--clip,-c] [--in-place,-i | --force,-f] pass-name [word-count]
         Generate a new password of word-count words (7 if not specified)
-        using the specified diceware-style formatted wordlist.
+        using the specified Diceware-style formatted wordlist.
         Inter-word separator defaults to '' (no separator).
         Prompt before overwriting existing password unless forced.
         Optionally replace only the first line of an existing file with a new
