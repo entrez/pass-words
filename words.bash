@@ -71,7 +71,7 @@ _character_name() {
 }
 
 cmd_words_generate() {
-    local opts qrcode=0 clip=0 force=0 inplace=0 pass currword wlistsize separator=$DEFAULT_SEPARATOR wordlist=$WORD_LIST
+    local opts qrcode=0 clip=0 force=0 inplace=0 separator=$DEFAULT_SEPARATOR wordlist=$WORD_LIST pass currword
     opts="$($GETOPT -o s:w:qcif -l separator:,wordlist:,qrcode,clip,in-place,force -n "$PROGRAM" -- "$@")"
     local err=$?
     eval set -- "$opts"
@@ -85,7 +85,8 @@ cmd_words_generate() {
         --) shift; break ;;
     esac done
 
-    [[ $err -ne 0 || ( $# -ne 3 && $# -ne 2 && $# -ne 1 ) || ( $force -eq 1 && $inplace -eq 1 ) || ( $qrcode -eq 1 && $clip -eq 1 ) ]] && die "Usage: $PROGRAM $COMMAND [generate] [-w file,--wordlist file]"
+    [[ $err -ne 0 || ( $# -ne 3 && $# -ne 2 && $# -ne 1 ) || ( $force -eq 1 && $inplace -eq 1 ) || ( $qrcode -eq 1 && $clip -eq 1 ) ]] \
+        && die "Usage: $PROGRAM $COMMAND [generate] [-w file,--wordlist file] [-s sep,--separator=sep] [--clip,-c] [--in-place,-i | --force,-f] pass-name [word-count]"
 
     local path="$1"
     local length="${2:-$WORD_COUNT}"
@@ -106,10 +107,11 @@ cmd_words_generate() {
 
     [[ $inplace -eq 0 && $force -eq 0 && -e $passfile ]] && yesno "An entry already exists for $path. Overwrite it?"
 
+    local -i wlistsize lineno
     wlistsize=$(wc -l "${wordlist}" | awk '{ print $1 }')
     for ((i=0;i<$length;i++)); do
-        thing=$(($(od -vAn -N2 -tu2 < /dev/urandom) % $wlistsize))
-        currword=$(sed "${thing}q;d" "$wordlist" | awk '{ print $2 }')
+        lineno=$(($(od -vAn -N2 -tu2 < /dev/urandom) % $wlistsize))
+        currword=$(sed "${lineno}q;d" "$wordlist" | awk '{ print $2 }')
         pass+="${currword}${separator}"
     done
     [[ $i -eq $length ]] || die "Could not generate password from /dev/urandom"
