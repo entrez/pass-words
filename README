@@ -1,0 +1,14 @@
+Usage:
+    pass words [generate] [-w file,--wordlist=file] [-s sep,--seperator=sep]
+            [--clip,-c] [--in-place,-i | --force,-f] pass-name [word-count]
+        Generate a new password of word-count words (7 if not specified)
+        using the specified diceware-style formatted wordlist.
+        Inter-word separator defaults to '' (no separator).
+        Prompt before overwriting existing password unless forced.
+        Optionally replace only the first line of an existing file with a new
+        password.
+
+        The variable PASSWORD_STORE_WORD_LIST can be used to set the default
+        wordlist file location; likewise, PASSWORD_STORE_DEFAULT_SEPARATOR and
+        PASSWORD_STORE_WORD_COUNT can be used to define the default separator
+        and word count, respectively.
