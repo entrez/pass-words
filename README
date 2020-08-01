@@ -21,8 +21,10 @@ Usage:
         password.
 
 Installation:
-    Move words.bash to ~/.password-store/.extensions/, or your system's global
-    pass extension dir (e.g. /usr/lib/password-store/extensions/).
+    Run `make install' from the repository's root directory. Alternatively, to
+    install manually, move words.bash to ~/.password-store/.extensions/, or
+    your system's global Password Store extension dir (probably something like
+    /usr/lib/password-store/extensions/).
 
 Config:
     The variable PASSWORD_STORE_WORD_LIST can be used to set the default
