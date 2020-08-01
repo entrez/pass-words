@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # pass words - Password Store Extension (https://www.passwordstore.org/)
-# Copyright (C) 2020 Michael Meyer
+# Copyright (C) 2020 Michael Meyer <me@entrez.cc>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-VERSION="0.0.1"
+VERSION="0.0.3"
 
 WORD_COUNT="${PASSWORD_STORE_WORD_COUNT:-7}"
 DEFAULT_WORD_LIST="${SYSTEM_EXTENSION_DIR}/words.wordlist.txt"
@@ -100,7 +100,7 @@ cmd_words_generate() {
     if [[ ! -e "$wordlist" ]]; then
         [[ "$wordlist" == "$DEFAULT_WORD_LIST" ]] || die "Error: wordlist file \"$wordlist\" does not exist."
         if yesno "Default wordlist file does not exist; download it now?"; then
-            CURL="$(type 2>/dev/null sia)" || die "Error: curl is not installed."$'\n'"The default word list can be downloaded from <${DEFAULT_WORD_LIST_SOURCE}>."
+            CURL="$(which 2>/dev/null curl)" || die "Error: curl is not installed."$'\n'"The default word list can be downloaded from <${DEFAULT_WORD_LIST_SOURCE}>."
             if ! ($CURL --create-dirs -\# -fo "$wordlist" "$DEFAULT_WORD_LIST_SOURCE" && [ -e "$wordlist" ]); then
                 die "Error: could not download wordlist file."
             fi
