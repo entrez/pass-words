@@ -46,38 +46,42 @@ _EOF
 
 _character_name() {
     local name
-    [ -z "$1" ] && name=no\ separator || case $1 in
-        \ ) name=space ;;
-        \.) name=period ;;
-        ,) name=comma ;;
-        -) name=hyphen ;;
-        _) name=underscore ;;
-        =) name=equals\ sign ;;
-        \*) name=asterisk ;;
-        \/) name=slash ;;
-        \#) name=octothorpe ;;
-        \;) name=semicolon ;;
-        :) name=colon ;;
-        \\) name=backslash ;;
-        \~) name=tilde ;;
-        \`) name=backtick ;;
-        ^) name=carat ;;
-        \%) name=percent\ sign ;;
-        @) name=at\ sign ;;
-        !) name=exclamation\ point ;;
-        \&) name=ampersand ;;
-    esac
+    if [ -z "$1" ]; then
+        name='no separator'
+    else
+        case $1 in
+            \ ) name='space' ;;
+            \.) name='period' ;;
+            ,) name='comma' ;;
+            -) name='hyphen' ;;
+            _) name='underscore' ;;
+            =) name='equals sign' ;;
+            \*) name='asterisk' ;;
+            /) name='slash' ;;
+            \#) name='octothorpe' ;;
+            \;) name='semicolon' ;;
+            :) name='colon' ;;
+            \\) name='backslash' ;;
+            \~) name='tilde' ;;
+            \`) name='backtick' ;;
+            ^) name='carat' ;;
+            %) name='percent sign' ;;
+            @) name='at sign' ;;
+            !) name='exclamation point' ;;
+            \&) name='ampersand' ;;
+        esac
+    fi
     [ -n "$name" ] && printf ' (%s)' "$name"
 }
 
 cmd_words_generate() {
-    local opts qrcode=0 clip=0 force=0 inplace=0 separator=$DEFAULT_SEPARATOR wordlist=$WORD_LIST pass currword
+    local opts qrcode=0 clip=0 force=0 inplace=0 separator="$DEFAULT_SEPARATOR" wordlist="$WORD_LIST" pass currword
     opts="$($GETOPT -o s:w:qcif -l separator:,wordlist:,qrcode,clip,in-place,force -n "$PROGRAM" -- "$@")"
     local err=$?
     eval set -- "$opts"
     while true; do case $1 in
-        -s|--separator) shift; separator=$1; shift ;;
-        -w|--wordlist) shift; wordlist=$1; shift ;;
+        -s|--separator) shift; separator="$1"; shift ;;
+        -w|--wordlist) shift; wordlist="$1"; shift ;;
         -q|--qrcode) qrcode=1; shift ;;
         -c|--clip) clip=1; shift ;;
         -f|--force) force=1; shift ;;
@@ -93,11 +97,13 @@ cmd_words_generate() {
     check_sneaky_paths "$path"
     [[ $length =~ ^[0-9]+$ ]] || die "Error: pass-length \"$length\" must be a number."
     [[ $length -gt 0 ]] || die "Error: pass-length must be greater than zero."
-    if [[ ! -e $wordlist ]]; then
+    if [[ ! -e "$wordlist" ]]; then
         [[ "$wordlist" == "$DEFAULT_WORD_LIST" ]] || die "Error: wordlist file \"$wordlist\" does not exist."
         if yesno "Default wordlist file does not exist; download it now?"; then
-            curl --create-dirs -\# -fo "$wordlist" "$DEFAULT_WORD_LIST_SOURCE"
-            [ $? -eq 0 ] && [ -e $wordlist ] || die "Error: could not download wordlist file."
+            CURL="$(type 2>/dev/null sia)" || die "Error: curl is not installed."$'\n'"The default word list can be downloaded from <${DEFAULT_WORD_LIST_SOURCE}>."
+            if ! ($CURL --create-dirs -\# -fo "$wordlist" "$DEFAULT_WORD_LIST_SOURCE" && [ -e "$wordlist" ]); then
+                die "Error: could not download wordlist file."
+            fi
         fi
     fi
     mkdir -p -v "$PREFIX/$(dirname -- "$path")"
@@ -105,13 +111,13 @@ cmd_words_generate() {
     local passfile="$PREFIX/$path.gpg"
     set_git "$passfile"
 
-    [[ $inplace -eq 0 && $force -eq 0 && -e $passfile ]] && yesno "An entry already exists for $path. Overwrite it?"
+    [[ $inplace -eq 0 && $force -eq 0 && -e "$passfile" ]] && yesno "An entry already exists for $path. Overwrite it?"
 
     local -i wlistsize lineno
-    wlistsize=$(wc -l "${wordlist}" | awk '{ print $1 }')
-    for ((i=0;i<$length;i++)); do
-        lineno=$(($(od -vAn -N2 -tu2 < /dev/urandom) % $wlistsize))
-        currword=$(sed "${lineno}q;d" "$wordlist" | awk '{ print $2 }')
+    wlistsize="$(wc -l "${wordlist}" | awk '{ print $1 }')"
+    for ((i=0;i<length;i++)); do
+        lineno="$(($(od -vAn -N2 -tu2 < /dev/urandom) % wlistsize))"
+        currword="$(sed "${lineno}q;d" "$wordlist" | awk '{ print $2 }')"
         pass+="${currword}${separator}"
     done
     [[ $i -eq $length ]] || die "Could not generate password from /dev/urandom"
@@ -155,5 +161,4 @@ case "$1" in
 esac
 exit 0
   
-
 # vim:et:sw=4:ts=4:sts=4:sr:
