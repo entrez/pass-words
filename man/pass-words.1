@@ -1,0 +1,83 @@
+.\" Manpage for pass-words
+.\" Report errors or typos at https://gitlab.com/entrez/pass-words/issues/
+.\" Copyright 2020 Michael Meyer <me@entrez.cc>
+.TH pass-words 1 "31 Jul 2020" "0.0.3" "Pass-words Manual"
+.SH NAME
+pass-words \- Generate mnemonic passwords in pass(1)
+.SH SYNOPSIS
+\fBpass words\fR [\fIgenerate\fR] [\fI-w file,--wordlist file\fR] [\fI-s sep,--separator sep\fR] [\fI--clip,-c\fR] [\fI--in-place,-i | --force,-f\fR] pass-name [\fIword-count\fR]
+.SH DESCRIPTION
+\fBpass words\fR is a 
+.I pass(1)
+extension for generating Diceware-style mnemonic passwords.
+.SH ARGUMENTS
+.TP
+.B pass-name
+The name of the passfile where you intend the generated password to be stored.
+.TP
+.B word-count
+The desired length of the resulting password, in number of words. If not
+provided, will default to the value of
+.B $PASSWORD_STORE_WORD_COUNT
+if it exists, or 7 otherwise.
+.TP
+.B -w file,--wordlist file
+Specify a wordlist to be used in generating passwords. Such wordlist files
+should be in plaintext, and formatted like Diceware wordlists such as this one
+from the EFF, i.e. each line including a series of numbers followed by a word:
+.br
+.RS 12
+.B https://www.eff.org/files/2016/09/08/eff_short_wordlist_2_0.txt
+.RE
+.TP
+.B -s sep,--separator sep
+Specify an inter-word separator (this is typically a specific character, but
+can also be a multicharacter string); e.g. with a separator of ` ' your
+passwords will look like `blunt emboss precinct tubby', while a separator of
+`.' will instead produce passwords like `blunt.emboss.precinct.tubby'.
+.br
+If not provided, will default to
+.B $PASSWORD_STORE_DEFAULT_SEPARATOR
+if it exists, or '' (no separator) otherwise.
+.TP
+.B --clip,-c
+Copy the generated password to the system clipboard.
+.TP
+.B --in-place,-i
+Do not interactively prompt; replace only the first line of an existing
+password file with the newly generated password.
+.TP
+.B --force,-f
+Do not interactively prompt before overwriting an existing passfile.
+.SH CONFIGURATION
+.LP
+The variable
+.B $PASSWORD_STORE_WORD_LIST
+can be used to set the default wordlist file location; likewise,
+.B $PASSWORD_STORE_DEFAULT_SEPARATOR
+and
+.B $PASSWORD_STORE_WORD_COUNT
+can be used to define the default separator and word count, respectively.
+.SH CONTRIBUTION AND AVAILABILITY
+To contribute, to report a bug, or to download the latest version of this software, visit:
+.LP
+.RS 4
+.B https://gitlab.com/entrez/pass-words/
+.RE
+.SH AUTHOR
+Written and maintained by Michael Meyer <\fIme@entrez.cc\fR>
+.SH LICENSE AND COPYRIGHT
+Copyright (c) 2020 Michael Meyer
+.LP
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+.LP
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+.LP
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+
