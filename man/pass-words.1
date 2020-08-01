@@ -1,11 +1,11 @@
 .\" Manpage for pass-words
 .\" Report errors or typos at https://gitlab.com/entrez/pass-words/issues/
 .\" Copyright 2020 Michael Meyer <me@entrez.cc>
-.TH pass-words 1 "31 Jul 2020" "0.0.3" "Pass-words Manual"
+.TH pass-words 1 "31 Jul 2020" "0.0.4" "Pass-words Manual"
 .SH NAME
 pass-words \- Generate mnemonic passwords in pass(1)
 .SH SYNOPSIS
-\fBpass words\fR [\fIgenerate\fR] [\fI-w file,--wordlist file\fR] [\fI-s sep,--separator sep\fR] [\fI--clip,-c\fR] [\fI--in-place,-i | --force,-f\fR] pass-name [\fIword-count\fR]
+\fBpass words\fR [\fIgenerate\fR] [\fI-w file,--wordlist=file\fR] [\fI-s sep,--separator=sep\fR] [\fI--clip,-c\fR] [\fI--in-place,-i | --force,-f\fR] pass-name [\fIword-count\fR]
 .SH DESCRIPTION
 \fBpass words\fR is a 
 .I pass(1)
@@ -21,7 +21,7 @@ provided, will default to the value of
 .B $PASSWORD_STORE_WORD_COUNT
 if it exists, or 7 otherwise.
 .TP
-.B -w file,--wordlist file
+.B -w file,--wordlist=file
 Specify a wordlist to be used in generating passwords. Such wordlist files
 should be in plaintext, and formatted like Diceware wordlists such as this one
 from the EFF, i.e. each line including a series of numbers followed by a word:
@@ -30,7 +30,7 @@ from the EFF, i.e. each line including a series of numbers followed by a word:
 .B https://www.eff.org/files/2016/09/08/eff_short_wordlist_2_0.txt
 .RE
 .TP
-.B -s sep,--separator sep
+.B -s sep,--separator=sep
 Specify an inter-word separator (this is typically a specific character, but
 can also be a multicharacter string); e.g. with a separator of ` ' your
 passwords will look like `blunt emboss precinct tubby', while a separator of

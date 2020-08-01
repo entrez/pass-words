@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-VERSION="0.0.3"
+VERSION="0.0.4"
 
 WORD_COUNT="${PASSWORD_STORE_WORD_COUNT:-7}"
 DEFAULT_WORD_LIST="${SYSTEM_EXTENSION_DIR}/words.wordlist.txt"
@@ -90,7 +90,7 @@ cmd_words_generate() {
     esac done
 
     [[ $err -ne 0 || ( $# -ne 3 && $# -ne 2 && $# -ne 1 ) || ( $force -eq 1 && $inplace -eq 1 ) || ( $qrcode -eq 1 && $clip -eq 1 ) ]] \
-        && die "Usage: $PROGRAM $COMMAND [generate] [-w file,--wordlist file] [-s sep,--separator=sep] [--clip,-c] [--in-place,-i | --force,-f] pass-name [word-count]"
+        && die "Usage: $PROGRAM $COMMAND [generate] [-w file,--wordlist=file] [-s sep,--separator=sep] [--clip,-c] [--in-place,-i | --force,-f] pass-name [word-count]"
 
     local path="$1"
     local length="${2:-$WORD_COUNT}"
