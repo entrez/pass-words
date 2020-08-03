@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-VERSION="0.0.4"
+VERSION="0.0.6"
 
 WORD_COUNT="${PASSWORD_STORE_WORD_COUNT:-7}"
 DEFAULT_WORD_LIST="${SYSTEM_EXTENSION_DIR}/words.wordlist.txt"
@@ -76,12 +76,12 @@ _character_name() {
 
 cmd_words_generate() {
     local opts qrcode=0 clip=0 force=0 inplace=0 separator="$DEFAULT_SEPARATOR" wordlist="$WORD_LIST" pass currword
-    opts="$($GETOPT -o s:w:qcif -l separator:,wordlist:,qrcode,clip,in-place,force -n "$PROGRAM" -- "$@")"
+    opts="$($GETOPT -o w:s:qcif -l wordlist:,separator:,qrcode,clip,in-place,force -n "$PROGRAM" -- "$@")"
     local err=$?
     eval set -- "$opts"
     while true; do case $1 in
-        -s|--separator) shift; separator="$1"; shift ;;
-        -w|--wordlist) shift; wordlist="$1"; shift ;;
+        -s|--separator) if [ -n "$2" ] && [ "$2" != "--" ]; then separator="$2"; shift; shift; else err=1; break; fi ;;
+        -w|--wordlist) if [ -n "$2" ] && [ "$2" != "--" ]; then wordlist="$2"; shift; shift; else err=1; break; fi ;;
         -q|--qrcode) qrcode=1; shift ;;
         -c|--clip) clip=1; shift ;;
         -f|--force) force=1; shift ;;
@@ -89,14 +89,14 @@ cmd_words_generate() {
         --) shift; break ;;
     esac done
 
-    [[ $err -ne 0 || ( $# -ne 3 && $# -ne 2 && $# -ne 1 ) || ( $force -eq 1 && $inplace -eq 1 ) || ( $qrcode -eq 1 && $clip -eq 1 ) ]] \
+    [[ $err -ne 0 || ( $# -ne 2 && $# -ne 1 ) || ( $force -eq 1 && $inplace -eq 1 ) || ( $qrcode -eq 1 && $clip -eq 1 ) ]] \
         && die "Usage: $PROGRAM $COMMAND [generate] [-w file,--wordlist=file] [-s sep,--separator=sep] [--clip,-c] [--in-place,-i | --force,-f] pass-name [word-count]"
 
     local path="$1"
     local length="${2:-$WORD_COUNT}"
     check_sneaky_paths "$path"
-    [[ $length =~ ^[0-9]+$ ]] || die "Error: pass-length \"$length\" must be a number."
-    [[ $length -gt 0 ]] || die "Error: pass-length must be greater than zero."
+    [[ $length =~ ^[0-9]+$ ]] || die "Error: word-count \"$length\" must be a number."
+    [[ $length -gt 0 ]] || die "Error: word-count must be greater than zero."
     if [[ ! -e "$wordlist" ]]; then
         [[ "$wordlist" == "$DEFAULT_WORD_LIST" ]] || die "Error: wordlist file \"$wordlist\" does not exist."
         if yesno "Default wordlist file does not exist; download it now?"; then
