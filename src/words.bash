@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-VERSION="0.0.6"
+VERSION="0.0.7"
 
 WORD_COUNT="${PASSWORD_STORE_WORD_COUNT:-7}"
 DEFAULT_WORD_LIST="${SYSTEM_EXTENSION_DIR}/words.wordlist.txt"
@@ -99,8 +99,8 @@ cmd_words_generate() {
     [[ $length -gt 0 ]] || die "Error: word-count must be greater than zero."
     if [[ ! -e "$wordlist" ]]; then
         [[ "$wordlist" == "$DEFAULT_WORD_LIST" ]] || die "Error: wordlist file \"$wordlist\" does not exist."
-        if yesno "Default wordlist file does not exist; download it now?"; then
-            CURL="$(which 2>/dev/null curl)" || die "Error: curl is not installed."$'\n'"The default word list can be downloaded from <${DEFAULT_WORD_LIST_SOURCE}>."
+        if yesno "Default wordlist file does not exist; download from <$DEFAULT_WORD_LIST_SOURCE>?"; then
+            CURL="$(which 2>/dev/null curl)" || die "Error: curl is not installed."$'\n'"To add the default word list manually, download"$'\n\t'"$DEFAULT_WORD_LIST_SOURCE"$'\n'"and move the file to"$'\n\t'"$DEFAULT_WORD_LIST"
             if ! ($CURL --create-dirs -\# -fo "$wordlist" "$DEFAULT_WORD_LIST_SOURCE" && [ -e "$wordlist" ]); then
                 die "Error: could not download wordlist file."
             fi
